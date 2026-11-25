@@ -1,0 +1,97 @@
+! R1 - show running-config
+! Lab 01 - Configuration initiale et securisation de base de Cisco IOS
+! Mots de passe expurges avant publication
+!
+Building configuration...
+
+Current configuration : 1081 bytes
+!
+version 15.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+!
+hostname R1
+!
+!
+!
+enable secret 5 <expurgé>
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0/0
+ description ##To SW1##
+ ip address 192.168.10.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/0/1
+ description ##To SW2##
+ ip address 192.168.20.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/0/2
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+ip classless
+!
+ip flow-export version 9
+!
+!
+!
+banner motd ^CACCES STRICTEMENT RESERVE AU PERSONNEL AUTORISE. Toute connexion non autorisee est interdite. Les activitees peuvent etre surveillees.^C
+!
+!
+!
+!
+line con 0
+ exec-timeout 5 0
+ password 7 <expurgé>
+ logging synchronous
+ login
+!
+line aux 0
+!
+line vty 0 4
+ login
+ transport input none
+line vty 5 15
+ login
+ transport input none
+!
+!
+!
+end

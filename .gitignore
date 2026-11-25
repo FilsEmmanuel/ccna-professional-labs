@@ -1,0 +1,10 @@
+# Sauvegardes Packet Tracer
+*.pkt.bak
+*.pka
+# Systeme
+Thumbs.db
+desktop.ini
+.DS_Store
+# Fichiers temporaires
+*~
+*.tmp
