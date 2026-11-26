@@ -73,6 +73,10 @@ C:\>arp -a
   192.168.1.1           000c.853a.7e01        dynamic
 ```
 
+![Séquence ARP puis ICMP en mode Simulation](captures/simulation-arp-icmp.png)
+
+L'Event List le montre dans l'ordre : ARP request, ARP reply, puis seulement ensuite les Echo Request et Echo Reply. Aucun ICMP ne circule tant que la MAC address du next hop n'est pas résolue.
+
 ```
 R1#show ip arp
 Protocol  Address          Age (min)  Hardware Addr   Type   Interface
@@ -157,7 +161,9 @@ Ouverture de `http://www.lab.local` depuis le navigateur de PC1, en mode Simulat
 | 0.016 → 0.028 | **HTTP** — la requête GET, puis la page |
 | 0.028 → 0.030 | **TCP** — fermeture de la session |
 
-![Chronologie DNS, TCP, HTTP](captures/chronologie-dns-tcp-http.png)
+![Chronologie 1 — DNS puis ouverture TCP](captures/chronologie-dns-tcp-http-1.png)
+![Chronologie 2 — échange HTTP](captures/chronologie-dns-tcp-http-2.png)
+![Chronologie 3 — fermeture de session](captures/chronologie-dns-tcp-http-3.png)
 
 **La query** (Outbound PDU Details à PC1, événement 0.000) :
 
