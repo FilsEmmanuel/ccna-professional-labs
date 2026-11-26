@@ -6,14 +6,14 @@
 
 ## Objectif
 
-Comprendre comment le Spanning Tree supprime les boucles d'un réseau redondant, choisir le pont racine par VLAN pour répartir la charge, mesurer le gain de Rapid PVST+ et protéger les ports d'accès.
+Comprendre comment le Spanning Tree supprime les boucles d'un réseau redondant, choisir le root bridge par VLAN pour répartir la charge, mesurer le gain de Rapid PVST+ et protéger les ports d'accès.
 
 ## Matériel (Packet Tracer)
 
 | Équipement | Modèle | Rôle |
 |---|---|---|
-| SW1, SW2 | 2960-24TT | Commutateurs de distribution |
-| SW3 | 2960-24TT | Commutateur d'accès |
+| SW1, SW2 | 2960-24TT | Switches de distribution |
+| SW3 | 2960-24TT | Switch d'accès |
 | PC1, PC2 | PC-PT | PC1 dans le VLAN 10, PC2 dans le VLAN 20 |
 | SW-PIRATE | 2960-24TT | Pour la panne uniquement |
 
@@ -27,18 +27,18 @@ Comprendre comment le Spanning Tree supprime les boucles d'un réseau redondant,
 | PC1 | Fa0 | SW3 | Fa0/1 |
 | PC2 | Fa0 | SW3 | Fa0/2 |
 
-Tous les liens entre commutateurs sont des trunks autorisant les VLAN 10 et 20. Adresses : VLAN 10 = 192.168.10.0/24, VLAN 20 = 192.168.20.0/24. Ajoute PC3 (VLAN 10) sur SW1 Fa0/1 pour tester.
+Tous les liens entre switches sont des trunks autorisant les VLAN 10 et 20. Adresses : VLAN 10 = 192.168.10.0/24, VLAN 20 = 192.168.20.0/24. Ajoute PC3 (VLAN 10) sur SW1 Fa0/1 pour tester.
 
 ## Tâches
 
-1. **Observation (PVST+ par défaut).** Pour le VLAN 10, identifie le pont racine et le rôle de chaque port (racine, désigné, bloqué). Justifie avec l'identifiant de pont (priorité + VLAN + MAC) et le coût.
+1. **Observation (PVST+ par défaut).** Pour le VLAN 10, identifie le root bridge et le rôle de chaque port (racine, désigné, bloqué). Justifie avec l'identifiant de pont (priorité + VLAN + MAC) et le coût.
 
-| Commutateur | Port | Rôle | État | Pourquoi |
+| Switch | Port | Rôle | État | Pourquoi |
 |---|---|---|---|---|
 
-2. **Répartition de charge.** SW1 devient racine principale du VLAN 10 et secondaire du VLAN 20 ; SW2 l'inverse. Vérifie que le port bloqué n'est plus le même dans les deux VLAN.
+2. **Répartition de charge.** SW1 devient root bridge primaire du VLAN 10 et secondaire du VLAN 20 ; SW2 l'inverse. Vérifie que le port bloqué n'est plus le même dans les deux VLAN.
 3. **Mesure en PVST+.** Lance un ping continu PC1 → PC3, coupe le lien actif de SW3 vers la racine et compte les pings perdus.
-4. **Rapid PVST+.** Passe les trois commutateurs en Rapid PVST+ et refais la même mesure. Compare.
+4. **Rapid PVST+.** Passe les trois switches en Rapid PVST+ et refais la même mesure. Compare.
 5. **Protection des ports d'accès.** Active PortFast et BPDU Guard sur les ports des PC de SW3.
 
 ## Vérifications attendues
@@ -56,7 +56,7 @@ Branche SW-PIRATE sur SW3 Fa0/1 à la place de PC1. Le port passe en `err-disabl
 
 ## Questions d'entretien
 
-1. Comment est élu le pont racine ?
+1. Comment est élu le root bridge ?
 2. Quels sont les états des ports en STP classique et combien de temps dure une convergence ?
 3. Quelle différence entre un port Alternate et un port Backup en RSTP ?
 4. Pourquoi n'active-t-on PortFast que vers des équipements terminaux ?

@@ -6,14 +6,14 @@
 
 ## Objectif
 
-Segmenter un réseau en VLAN répartis sur deux commutateurs, les relier par un trunk 802.1Q et les faire communiquer par un routeur avec des sous-interfaces.
+Segmenter un réseau en VLAN répartis sur deux switches, les relier par un trunk 802.1Q et les faire communiquer par un router avec des sous-interfaces.
 
 ## Matériel (Packet Tracer)
 
 | Équipement | Modèle | Rôle |
 |---|---|---|
 | R1 | ISR4331 | Routage inter-VLAN (router-on-a-stick) |
-| SW1, SW2 | 2960-24TT | Commutateurs d'accès |
+| SW1, SW2 | 2960-24TT | Switches d'accès |
 | PC1 à PC4 | PC-PT | Postes |
 
 ## Câblage
@@ -29,7 +29,7 @@ Segmenter un réseau en VLAN répartis sur deux commutateurs, les relier par un 
 
 ## VLAN et adressage
 
-| VLAN | Nom | Réseau | Passerelle (R1) |
+| VLAN | Nom | Réseau | Gateway (R1) |
 |---|---|---|---|
 | 10 | ADMIN | 192.168.10.0/24 | G0/0/0.10 — 192.168.10.1 |
 | 20 | ETUDIANTS | 192.168.20.0/24 | G0/0/0.20 — 192.168.20.1 |
@@ -37,7 +37,7 @@ Segmenter un réseau en VLAN répartis sur deux commutateurs, les relier par un 
 | 99 | NATIF | aucun | — |
 | 999 | PARKING | aucun | — |
 
-Gestion des commutateurs : SW1 = 192.168.30.11, SW2 = 192.168.30.12 (interface VLAN 30). PC1 .10 et PC3 .11 dans le VLAN 10 ; PC2 .10 et PC4 .11 dans le VLAN 20.
+Gestion des switches : SW1 = 192.168.30.11, SW2 = 192.168.30.12 (interface VLAN 30). PC1 .10 et PC3 .11 dans le VLAN 10 ; PC2 .10 et PC4 .11 dans le VLAN 20.
 
 ## Tâches
 
@@ -45,9 +45,9 @@ Gestion des commutateurs : SW1 = 192.168.30.11, SW2 = 192.168.30.12 (interface V
 2. Place chaque port de PC en mode access dans son VLAN.
 3. Configure les trunks : mode trunk forcé, VLAN natif 99 des deux côtés, VLAN autorisés limités à 10, 20, 30 et 99.
 4. Place tous les ports inutilisés dans le VLAN 999 et désactive-les.
-5. Sur R1 : une sous-interface par VLAN avec encapsulation 802.1Q et l'adresse de passerelle ; active l'interface physique.
-6. Configure l'adresse de gestion de chaque commutateur et sa passerelle.
-7. Teste : PC1 ↔ PC3 (même VLAN, sur deux commutateurs), PC1 ↔ PC2 (inter-VLAN), PC1 → SW2 (gestion).
+5. Sur R1 : une sous-interface par VLAN avec encapsulation 802.1Q et l'adresse de gateway ; active l'interface physique.
+6. Configure l'management IP address de chaque switch et sa gateway.
+7. Teste : PC1 ↔ PC3 (même VLAN, sur deux switches), PC1 ↔ PC2 (inter-VLAN), PC1 → SW2 (gestion).
 
 ## Vérifications attendues
 
@@ -56,17 +56,17 @@ Gestion des commutateurs : SW1 = 192.168.30.11, SW2 = 192.168.30.12 (interface V
 | `show vlan brief` | Chaque port dans le bon VLAN ; ports de trunk absents de la liste |
 | `show interfaces trunk` | Mode `on`, encapsulation 802.1q, VLAN natif 99, VLAN autorisés 10,20,30,99 |
 | `show ip interface brief` (R1) | Sous-interfaces `.10`, `.20`, `.30` en `up/up` |
-| `tracert` PC1 → PC2 | Premier saut : 192.168.10.1 |
+| `tracert` PC1 → PC2 | First hop : 192.168.10.1 |
 
 ## Panne à provoquer
 
-Sur le trunk SW1–SW2, retire le VLAN 20 de la liste des VLAN autorisés côté SW1. PC2 ↔ PC4 échoue mais PC1 ↔ PC3 fonctionne. Trouve la cause avec `show interfaces trunk` sur les deux commutateurs.
+Sur le trunk SW1–SW2, retire le VLAN 20 de la liste des VLAN autorisés côté SW1. PC2 ↔ PC4 échoue mais PC1 ↔ PC3 fonctionne. Trouve la cause avec `show interfaces trunk` sur les deux switches.
 
 ## Questions d'entretien
 
 1. Qu'est-ce que le VLAN natif ? Pourquoi éviter de laisser le VLAN 1 ?
 2. Combien d'octets ajoute une étiquette 802.1Q, et où ?
-3. Quelle différence entre un port access et un port trunk ?
+3. Quelle différence entre un access port et un port trunk ?
 4. Quelle est la limite principale du router-on-a-stick ?
 
 ## Livrables (après réalisation dans Packet Tracer)

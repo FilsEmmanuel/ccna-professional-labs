@@ -6,7 +6,7 @@
 
 ## Objectif
 
-Agréger plusieurs liens physiques en un seul lien logique, plus rapide et redondant, avec LACP, PAgP et en couche 3 entre deux commutateurs de cœur.
+Agréger plusieurs liens physiques en un seul lien logique, plus rapide et redondant, avec LACP, PAgP et en couche 3 entre deux switches de cœur.
 
 ## Matériel (Packet Tracer)
 
@@ -18,42 +18,42 @@ Agréger plusieurs liens physiques en un seul lien logique, plus rapide et redon
 
 ## Câblage
 
-| Agrégat | Membres | Protocole | Type |
+| Bundle | Membres | Protocole | Type |
 |---|---|---|---|
 | Po1 : ASW1 – DSW1 | ASW1 Gi0/1-2 ↔ DSW1 Gi1/0/1-2 | LACP | Couche 2, trunk |
 | Po2 : ASW2 – DSW2 | ASW2 Gi0/1-2 ↔ DSW2 Gi1/0/1-2 | PAgP | Couche 2, trunk |
 | Po3 : DSW1 – DSW2 | DSW1 Gi1/0/23-24 ↔ DSW2 Gi1/0/23-24 | LACP | Couche 3, 10.0.12.0/30 |
 
-PC1 sur ASW1 Fa0/1, PC2 sur ASW2 Fa0/1. VLAN 10 : SVI 192.168.10.1 sur DSW1 et VLAN 20 : SVI 192.168.20.1 sur DSW2 (place PC2 dans le VLAN 20). Routes statiques entre DSW1 et DSW2 via Po3.
+PC1 sur ASW1 Fa0/1, PC2 sur ASW2 Fa0/1. VLAN 10 : SVI 192.168.10.1 sur DSW1 et VLAN 20 : SVI 192.168.20.1 sur DSW2 (place PC2 dans le VLAN 20). Static routes entre DSW1 et DSW2 via Po3.
 
 ## Tâches
 
 1. Configure Po1 en LACP (actif d'un côté, passif de l'autre) puis passe-le en trunk.
 2. Configure Po2 en PAgP (desirable / auto) puis passe-le en trunk.
-3. Configure Po3 en couche 3 : ports non commutés, adresse IP sur l'interface Port-channel.
-4. Choisis la méthode de répartition de charge `src-dst-ip` sur les commutateurs qui la proposent.
+3. Configure Po3 en couche 3 : ports non commutés, IP address sur l'interface Port-channel.
+4. Choisis la méthode de load balancing `src-dst-ip` sur les switches qui la proposent.
 5. Ajoute les SVI, les routes et teste PC1 ↔ PC2.
-6. **Redondance.** Ping continu PC1 → PC2, coupe un membre de chaque agrégat, puis observe.
+6. **Redondance.** Ping continu PC1 → PC2, coupe un membre de chaque bundle, puis observe.
 
 ## Vérifications attendues
 
 | Commande | Résultat attendu |
 |---|---|
 | `show etherchannel summary` | Po1 et Po2 en `(SU)`, Po3 en `(RU)`, membres en `(P)` |
-| `show etherchannel port-channel` | Protocole LACP ou PAgP selon l'agrégat |
+| `show etherchannel port-channel` | Protocole LACP ou PAgP selon l'bundle |
 | `show interfaces trunk` | Po1 et Po2 apparaissent comme trunks, pas les ports physiques |
 | Ping pendant la coupure d'un membre | Aucune perte ou presque |
 
 ## Panne à provoquer
 
-Passe les deux côtés de Po1 en LACP passif. L'agrégat ne se forme plus. Explique pourquoi, puis corrige. Ensuite, change la vitesse d'un seul membre de Po2 et observe son état (`s`, suspendu).
+Passe les deux côtés de Po1 en LACP passif. L'bundle ne se forme plus. Explique pourquoi, puis corrige. Ensuite, change la vitesse d'un seul membre de Po2 et observe son état (`s`, suspendu).
 
 ## Questions d'entretien
 
-1. Quelles combinaisons de modes LACP et PAgP forment un agrégat ?
+1. Quelles combinaisons de modes LACP et PAgP forment un bundle ?
 2. Pourquoi les membres doivent-ils avoir exactement la même configuration ?
 3. Comment le trafic est-il réparti entre les liens ?
-4. Pourquoi le STP voit-il un agrégat comme un seul lien ?
+4. Pourquoi le STP voit-il un bundle comme un seul lien ?
 
 ## Livrables (après réalisation dans Packet Tracer)
 

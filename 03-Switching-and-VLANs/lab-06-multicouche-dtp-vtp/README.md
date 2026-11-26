@@ -1,12 +1,12 @@
 # Lab 06 — Commutation multicouche, DTP et VTP
 
-**Days Jeremy's IT Lab :** 18 (commutation multicouche, SVI) et 19 (DTP et VTP)
+**Days Jeremy's IT Lab :** 18 (multilayer switching, SVI) et 19 (DTP et VTP)
 **Durée estimée :** 2 h · **Niveau :** intermédiaire
 **Statut : à réaliser.** Ce document est l'énoncé que je me suis fixé ; il sera remplacé par le compte rendu une fois le lab terminé dans Packet Tracer.
 
 ## Objectif
 
-Remplacer le router-on-a-stick par un commutateur de cœur multicouche (SVI), comprendre la négociation DTP et la diffusion des VLAN par VTP, puis appliquer les bonnes pratiques.
+Remplacer le router-on-a-stick par un switch de cœur multicouche (SVI), comprendre la négociation DTP et la diffusion des VLAN par VTP, puis appliquer les bonnes pratiques.
 
 ## Matériel (Packet Tracer)
 
@@ -55,13 +55,13 @@ PC1 et PC3 dans le VLAN 10, PC2 et PC4 dans le VLAN 20.
 **Partie B — VTP**
 
 3. DSW1 en mode serveur, domaine `CAMPUS`, mot de passe VTP ; ASW1 et ASW2 en mode client avec le même domaine et le même mot de passe.
-4. Crée les VLAN 10, 20 et 30 uniquement sur DSW1 et vérifie qu'ils apparaissent sur les commutateurs d'accès.
+4. Crée les VLAN 10, 20 et 30 uniquement sur DSW1 et vérifie qu'ils apparaissent sur les switches d'accès.
 5. Relève le numéro de révision VTP avant et après la création d'un VLAN.
 
 **Partie C — Routage multicouche**
 
-6. Sur DSW1 : active le routage IP, crée les SVI, configure Gi1/0/24 en port routé et ajoute une route par défaut vers R1.
-7. Sur R1 : une route résumée `192.168.0.0/16` vers DSW1.
+6. Sur DSW1 : active le routage IP, crée les SVI, configure Gi1/0/24 en port routé et ajoute une default route vers R1.
+7. Sur R1 : une summary route `192.168.0.0/16` vers DSW1.
 8. Teste PC1 ↔ PC2, PC1 ↔ PC4 et PC1 → 10.0.0.1.
 
 ## Vérifications attendues
@@ -70,7 +70,7 @@ PC1 et PC3 dans le VLAN 10, PC2 et PC4 dans le VLAN 20.
 |---|---|
 | `show interfaces trunk` | Trunks en mode `on`, négociation désactivée |
 | `show vtp status` | Même domaine, rôles serveur et client, même numéro de révision |
-| `show ip route` (DSW1) | Réseaux des VLAN en `C`, route par défaut `S*` |
+| `show ip route` (DSW1) | Réseaux des VLAN en `C`, default route `S*` |
 | `show interfaces gi1/0/24 switchport` | `Switchport: Disabled` |
 
 ## Panne à provoquer
